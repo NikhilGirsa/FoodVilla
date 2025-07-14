@@ -5,7 +5,8 @@ export const useRestaurantData = () => {
   const [data, setData] = useState({
     mealOptions: null,
     topRestaurants: null,
-    restaurantList: [],
+    restaurantList: [], // online delivery
+    topRestaurantList: [], // <-- new
     isLoading: true,
     error: null,
   });
@@ -25,10 +26,15 @@ export const useRestaurantData = () => {
           ) || [];
 
         const mealOptions = gridWidgets[0];
+        const topRestaurantsRaw = gridWidgets[1]?.card?.card;
+
+        const topRestaurantList = topRestaurantsRaw?.gridElements?.info || [];
+
         const topRestaurants = {
-          header: gridWidgets[1]?.card?.card?.header,
-          gridElements: gridWidgets[1]?.card?.card?.gridElements,
+          header: topRestaurantsRaw?.header,
+          gridElements: topRestaurantsRaw?.gridElements,
         };
+
         const restaurants =
           gridWidgets[2]?.card?.card?.gridElements?.infoWithStyle
             ?.restaurants || [];
@@ -36,6 +42,7 @@ export const useRestaurantData = () => {
         setData({
           mealOptions,
           topRestaurants,
+          topRestaurantList,
           restaurantList: restaurants,
           isLoading: false,
           error: null,

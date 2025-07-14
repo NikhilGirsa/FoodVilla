@@ -9,7 +9,7 @@ const SearchBar = ({ value, onChange, placeholder }) => {
         onChange={(e) => onChange(e.target.value)}
       />
       <button
-        className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+        className="cursor-pointer px-6 py-2 bg-orange-300 dark:bg-black text-white rounded-lg hover:bg-orange-400 dark:hover:bg-orange-600 transition-colors"
         onClick={() => onChange(value)}
       >
         Search

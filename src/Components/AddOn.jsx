@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 const AddOn = ({ data, name, price, onClose, onSubmit }) => {
-  if (!data || !Array.isArray(data)) return null;
-
   const [selections, setSelections] = useState({});
   const [expandedGroups, setExpandedGroups] = useState({});
+  if (!data || !Array.isArray(data)) return null;
+
   const basePrice = (price || 0) / 100;
 
   const handleChange = (groupIndex, choiceId, isSingle) => {
@@ -72,7 +72,7 @@ const AddOn = ({ data, name, price, onClose, onSubmit }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-30"
       onClick={onClose}
     >
       <div

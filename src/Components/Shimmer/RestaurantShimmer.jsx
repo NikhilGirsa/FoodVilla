@@ -22,7 +22,7 @@ const RestaurantShimmer = () => {
       {/* Top Restaurant Chains shimmer */}
       <div className="px-4 py-6 max-w-6xl mx-auto">
         {/* Title Shimmer */}
-        <div className="h-7 w-64 mb-6 bg-gray-200 rounded-full animate-shimmer"></div>
+        <div className="h-7 w-64 mb-6 bg-gray-200 rounded-full animate-pulse"></div>
 
         {/* Restaurant Cards Shimmer */}
         <div className="flex overflow-x-auto pb-4 scrollbar-hide gap-8">
@@ -44,16 +44,10 @@ const RestaurantShimmer = () => {
         </div>
       </div>
 
-      {/* Search bar shimmer */}
-      <div className="flex justify-center items-center gap-2 mb-6">
-        <div className="h-10 w-64 bg-gray-200 rounded-md animate-pulse" />
-        <div className="h-10 w-24 bg-gray-300 rounded-md animate-pulse" />
-      </div>
-
       {/* Restaurant card grid shimmer */}
       <div className="px-4 py-6 max-w-6xl mx-auto">
         {/* Title Shimmer */}
-        <div className="h-7 w-3/4 mb-6 bg-gray-200 rounded-full animate-shimmer"></div>
+        <div className="h-7 w-3/4 mb-6 bg-gray-200 rounded-full animate-pulse"></div>
 
         {/* Grid Shimmer */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

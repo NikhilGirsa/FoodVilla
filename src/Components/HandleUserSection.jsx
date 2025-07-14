@@ -4,7 +4,13 @@ import { FaUserCircle } from "react-icons/fa";
 import { toggleLoginSidebar } from "../utils/toggleSlice";
 import { googleLogout } from "@react-oauth/google";
 
-const HeaderUserSection = ({ user, setUser, toggleTheme }) => {
+const HeaderUserSection = ({
+  user,
+  setUser,
+  toggleTheme,
+  isDarkMode,
+  setIsDarkMode,
+}) => {
   const dispatch = useDispatch();
   const [showDropdown, setShowDropdown] = useState(false);
   const timeoutRef = useRef(null);
@@ -12,6 +18,11 @@ const HeaderUserSection = ({ user, setUser, toggleTheme }) => {
   const handleLogout = () => {
     googleLogout();
     setUser(null);
+  };
+
+  const handleToggleTheme = () => {
+    toggleTheme(); // updates parent theme
+    setIsDarkMode(!isDarkMode); // updates dropdown text label
   };
 
   const handleMouseEnter = () => {
@@ -43,9 +54,9 @@ const HeaderUserSection = ({ user, setUser, toggleTheme }) => {
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li
                   className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                  onClick={toggleTheme}
+                  onClick={handleToggleTheme}
                 >
-                  Toggle Dark Mode
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
                 </li>
                 <li
                   className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 cursor-pointer"

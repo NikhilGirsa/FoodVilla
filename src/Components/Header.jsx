@@ -1,16 +1,26 @@
+import { Link, useNavigate } from "react-router";
 import { FaPhoneAlt, FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { useState, useRef } from "react";
 import HeaderUserSection from "./HandleUserSection";
 
 import logo from "../../assets/foodvilla.png";
 import { toggleLoginSidebar } from "../utils/toggleSlice";
-import { useState } from "react";
+import { IMG_CDN_URL } from "../utils/constants";
 
-const Header = ({ theme, setTheme }) => {
+const Header = ({
+  theme,
+  setTheme,
+  searchValue,
+  setSearchValue,
+  searchResults,
+  setSearchResults,
+}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const searchRef = useRef(null);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const isLoginSidebarOpen = useSelector(
@@ -18,6 +28,8 @@ const Header = ({ theme, setTheme }) => {
   );
 
   const [user, setUser] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(theme === "dark");
+
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const handleLoginSuccess = (credentialResponse) => {
@@ -27,27 +39,63 @@ const Header = ({ theme, setTheme }) => {
   };
 
   const toggleDarkMode = () => {
-    if (theme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
+    const newMode = isDarkMode ? "light" : "dark";
+    setTheme(newMode);
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const handleSearchSelect = (restaurant) => {
+    setSearchValue(""); // Clear input
+    setSearchResults([]); // Hide dropdown
+    navigate(`/restaurant/menu/${restaurant.info.id}`);
   };
 
   return (
-    <>
-      {/* Header */}
-      <div
-        className={`${
-          theme === "dark" ? "bg-orange-600" : ""
-        } flex items-center justify-between p-4 bg-amber-200 shadow-md transition-colors duration-300`}
-      >
+    <div className="relative z-50">
+      {/* Header Top Section */}
+      <div className="flex flex-wrap items-center justify-between p-4 bg-amber-200 dark:bg-orange-400 shadow-md transition-colors duration-300">
+        {/* Logo */}
         <div className="flex items-center">
           <Link to="/">
             <img className="w-32" src={logo} alt="Food Villa Logo" />
           </Link>
         </div>
 
+        {/* Search */}
+        <div className="relative w-full max-w-md mx-4">
+          <input
+            type="text"
+            placeholder="Search restaurants..."
+            className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-black dark:text-white"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onBlur={() => setTimeout(() => setSearchResults([]), 150)}
+            ref={searchRef}
+          />
+
+          {searchResults.length > 0 && (
+            <div className="absolute w-full mt-1 max-h-72 overflow-y-auto bg-white dark:bg-gray-800 shadow-lg rounded-md border border-gray-200 dark:border-gray-700 z-50">
+              {searchResults.map((restaurant) => (
+                <div
+                  key={restaurant?.info?.id}
+                  onClick={() => handleSearchSelect(restaurant)}
+                  className="flex items-center gap-4 px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  <img
+                    src={IMG_CDN_URL + restaurant?.info?.cloudinaryImageId}
+                    alt={restaurant?.info?.name}
+                    className="w-12 h-12 rounded-md object-cover"
+                  />
+                  <span className="text-sm font-medium text-gray-800 dark:text-white">
+                    {restaurant?.info?.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Right Section */}
         <nav>
           <ul className="flex items-center gap-6">
             <li>
@@ -77,17 +125,10 @@ const Header = ({ theme, setTheme }) => {
               <HeaderUserSection
                 user={user}
                 setUser={setUser}
+                isDarkMode={isDarkMode}
+                setIsDarkMode={setIsDarkMode}
                 toggleTheme={toggleDarkMode}
               />
-            </li>
-
-            <li>
-              <button
-                onClick={toggleDarkMode}
-                className="px-3 py-1 rounded bg-gray-200 cursor-pointer dark:bg-gray-700 text-black dark:text-white"
-              >
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
-              </button>
             </li>
           </ul>
         </nav>
@@ -125,7 +166,7 @@ const Header = ({ theme, setTheme }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -5,7 +5,6 @@ import { useState } from "react";
 const ItemCategory = ({ data, ResInfoData }) => {
   const { title, itemCards } = data;
   const [isOpen, setIsOpen] = useState(true);
-  console.log("ItemCategory data:", data, "ResInfoData:", ResInfoData);
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
