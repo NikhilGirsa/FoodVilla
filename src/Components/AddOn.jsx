@@ -3,7 +3,8 @@ import { useState } from "react";
 const AddOn = ({ data, name, price, onClose, onSubmit }) => {
   const [selections, setSelections] = useState({});
   const [expandedGroups, setExpandedGroups] = useState({});
-  if (!data || !Array.isArray(data)) return null;
+
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
 
   const basePrice = (price || 0) / 100;
 
@@ -35,6 +36,7 @@ const AddOn = ({ data, name, price, onClose, onSubmit }) => {
       id: c.id,
       name: c.name,
       price: (c.price || 0) / 100,
+      veg: c.veg,
     })),
   }));
 
@@ -65,9 +67,11 @@ const AddOn = ({ data, name, price, onClose, onSubmit }) => {
       customAddOn: selectedAddOns,
       price: parseFloat(getTotalPrice()),
       isVeg: selectedAddOns.every((a) => a.veg),
+      quantity: 1,
     };
 
     onSubmit(itemData);
+    onClose();
   };
 
   return (
@@ -82,7 +86,6 @@ const AddOn = ({ data, name, price, onClose, onSubmit }) => {
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-xl"
-          aria-label="Close"
         >
           &times;
         </button>

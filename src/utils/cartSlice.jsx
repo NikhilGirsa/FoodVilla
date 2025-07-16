@@ -27,8 +27,14 @@ const cartSlice = createSlice({
     },
 
     updateItemQuantity: (state, action) => {
-      const { itemId, newQuantity } = action.payload;
-      const index = state.cartItems.findIndex((item) => item.id === itemId);
+      const { itemId, newQuantity, customAddOn } = action.payload;
+
+      const index = state.cartItems.findIndex(
+        (item) =>
+          item.id === itemId &&
+          JSON.stringify(item.customAddOn || []) ===
+            JSON.stringify(customAddOn || [])
+      );
 
       if (index !== -1) {
         if (newQuantity <= 0) {
@@ -38,7 +44,6 @@ const cartSlice = createSlice({
         }
       }
     },
-
     clearCart: (state) => {
       state.cartItems = [];
     },

@@ -13,8 +13,42 @@ const Cart = () => {
   const calculateTotal = () =>
     cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
-  const handleQuantityChange = (index, newQuantity) => {
-    dispatch(updateItemQuantity({ index, newQuantity }));
+  const handleQuantityChange = (item, newQuantity) => {
+    dispatch(
+      updateItemQuantity({
+        itemId: item.id,
+        newQuantity,
+        customAddOn: item.customAddOn || [],
+      })
+    );
+  };
+
+  const handlePayment = () => {
+    const options = {
+      key: "rzp_test_MN82g5LubXgbVV", // 🔁 Replace with your Razorpay Test Key
+      amount: Math.round(total * 100), // ₹ in paise
+      currency: "INR",
+      name: "Food Villa",
+      description: "Order Payment",
+      image: RESTAURANT_LOGO_URL,
+      handler: function (response) {
+        handleClearCart();
+        alert(
+          `Payment successful! Payment ID: ${response.razorpay_payment_id}`
+        );
+      },
+      prefill: {
+        name: "Nikhil Girsa",
+        email: "nikhil@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#0000FF",
+      },
+    };
+
+    const razor = new window.Razorpay(options);
+    razor.open();
   };
 
   const handleClearCart = () => dispatch(clearCart());
@@ -78,8 +112,8 @@ const Cart = () => {
               </div>
               <div className="flex items-center">
                 <button
-                  onClick={() => handleQuantityChange(index, item.quantity - 1)}
-                  className="w-8 h-8 flex items-center justify-center border border-gray-300 dark:border-gray-600 rounded-l-md"
+                  onClick={() => handleQuantityChange(item, item.quantity - 1)}
+                  className="w-8 h-8 flex items-center justify-center border border-gray-300 dark:border-gray-600 rounded-l-md cursor-pointer"
                 >
                   -
                 </button>
@@ -87,8 +121,8 @@ const Cart = () => {
                   {item.quantity}
                 </span>
                 <button
-                  onClick={() => handleQuantityChange(index, item.quantity + 1)}
-                  className="w-8 h-8 flex items-center justify-center border border-gray-300 dark:border-gray-600 rounded-r-md"
+                  onClick={() => handleQuantityChange(item, item.quantity + 1)}
+                  className="w-8 h-8 flex items-center justify-center border border-gray-300 dark:border-gray-600 rounded-r-md cursor-pointer"
                 >
                   +
                 </button>
@@ -127,7 +161,10 @@ const Cart = () => {
         >
           Clear Cart
         </button>
-        <button className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+        <button
+          onClick={handlePayment}
+          className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 cursor-pointer"
+        >
           Proceed to Checkout
         </button>
       </div>

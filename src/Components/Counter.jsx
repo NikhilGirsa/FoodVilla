@@ -19,8 +19,22 @@ const Counter = ({ id, name, price, addOn, restaurantInfo, vegClassifier }) => {
     if (existingItem) {
       setLastCustomization(existingItem.customAddOn || []);
       setShowRepeatPrompt(true);
-    } else {
+    } else if (addOn?.length > 0) {
       setShowAddOn(true);
+    } else {
+      dispatch(
+        addToCart({
+          item: {
+            id,
+            name,
+            price: (price || 0) / 100,
+            quantity: 1,
+            customAddOn: [],
+            isVeg: vegClassifier === "VEG",
+          },
+          ResInfoData: restaurantInfo,
+        })
+      );
     }
   };
 
