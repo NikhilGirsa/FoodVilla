@@ -31,3 +31,9 @@
 - Slice (cartSlice, LocationSlice and so on...)
 - dispatch (action)
 - Selector
+
+# Types of Testing (Developer)
+
+- Unit Testing
+- Integration Testing
+- End to End Testing - e2e Testing

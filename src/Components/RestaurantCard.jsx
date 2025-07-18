@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const RestaurantCard = ({ restaurantData }) => {
   const { id, name, avgRatingString, cloudinaryImageId, areaName, sla } =
-    restaurantData?.info;
+    restaurantData?.info || {};
 
   return (
     <Link to={`/restaurant/menu/${id}`}>
