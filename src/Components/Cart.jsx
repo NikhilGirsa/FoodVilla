@@ -25,7 +25,7 @@ const Cart = () => {
 
   const handlePayment = () => {
     const options = {
-      key: "rzp_test_MN82g5LubXgbVV", // 🔁 Replace with your Razorpay Test Key
+      key: "YOUR_KEY_HERE", // 🔁 Replace with your Razorpay Test Key
       amount: Math.round(total * 100), // ₹ in paise
       currency: "INR",
       name: "Food Villa",
